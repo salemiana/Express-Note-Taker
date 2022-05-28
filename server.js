@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const notesData = require('./db/db.json');
+//const notesData = require('./db/db.json');
 const app = express();
 
 // Sets port for listening and let heroku decide on port, if not, use port 8080
@@ -13,13 +13,13 @@ app.use(express.static('public'));
 
 
 //route to notes.html
-app.get('/', (req, res) => {
+app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/notes.html'));
   });
 
   //route to read the `db.json` file and return all saved notes as JSON.
-app.get('/api/notes', (req, res) => res.json(notesData));
-console.log(notesData);
+app.get('/notes', (req, res) => res.sendFile('./db/db.json'));
+//console.log(./db/db.json);
 
 
 //GET request to index.html
@@ -40,7 +40,7 @@ app.post("/api/notes", (req, res) => {
     noteList.push(newNote);
 
     //write the updated data to db.json
-    fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
+    fs.writeFileSync('npm stanotesData', JSON.stringify(noteList));
     res.json(noteList);
 })
   
