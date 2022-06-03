@@ -18,41 +18,47 @@ app.get('/notes', (req, res) => {
   });
 
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'));
-});
-
-
-app.post('/api/notes', (req, res) => {
+  
+  app.get('/api/notes', (req, res)=> {
+    console.log("connected")
+    const newNoteList = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+    res.json(newNoteList);
+    console.table(newNoteList);
+  });
+  
+  app.post('/api/notes', (req, res) => {
     let newNote = req.body;
     let noteList = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
     let notelength = (noteList.length).toString();
-
+    
     newNote.id = notelength;
-
+    
     noteList.push(newNote);
-
+    
     fs.writeFileSync('./db/db.json', JSON.stringify(noteList));
     res.json(noteList);
- });
-
-//delete option
-app.delete('api/notes/:id', (req, res) => {
+  });
+  
+  //delete option
+  app.delete('api/notes/:id', (req, res) => {
     let noteList = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
     let noteId = (req.params.id).toString();
-
+    
     noteList = noteList.filter(selected =>{
-        return selected.id != noteId;
+      return selected.id != noteId;
     })
-
+    
     fs.writeFileSync('./db/db.json', JSON.stringify(noteList));
     res.json(noteList);
-});
-
-
-app.listen(PORT, () =>
+  });
+  
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '/public/index.html'));
+  });
+  
+  app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
-);
+  );
 
 
 
