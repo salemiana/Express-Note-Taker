@@ -41,44 +41,22 @@ app.post("/api/notes", (req, res) => {
 });
 
 //delete option
-app.delete("api/notes/:id", (req, res) => {
-  let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-  let listId = req.params.id.toString();
-
-  noteList = noteList.filter((selected) => {
-    return selected.id != noteId;
-  });
-
-  fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
-  res.json(noteList);
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
-});
-
-// app.delete("/api/notes/:id", (req, res) => {
+// app.delete("api/notes/:id", (req, res) => {
 //   let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-//   let noteId = req.params.id.toString();
+//   let listId = req.params.id.toString();
 
 //   noteList = noteList.filter((selected) => {
-//     return selected.id != noteId;
+//     return selected.id != listId;
 //   });
 
 //   fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
 //   res.json(noteList);
 // });
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 
-app.delete("/api/notes/:id", (req, res, next)=>{
-  const noteId = req.params.id.toString();
-  getIndexById("req params", noteId);
-  const itemIndex = myArray.findIndex(({ id }) => id === req.params.id);
-  if (itemIndex >= 0) {
-    myArray.splice(itemIndex, 1);
-  }
-
-})
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} `)
