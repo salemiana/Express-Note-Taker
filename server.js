@@ -1,9 +1,13 @@
+
+//require dependencies
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
+//creates a new express application
 const app = express();
 
+// takes the PORT by reading the Environment Variable or the one already set.
 const PORT = process.env.PORT || 3001;
 console.log(PORT);
 
@@ -39,7 +43,7 @@ app.post("/api/notes", (req, res) => {
 //delete option
 app.delete("api/notes/:id", (req, res) => {
   let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-  let lisId = req.params.id.toString();
+  let listId = req.params.id.toString();
 
   noteList = noteList.filter((selected) => {
     return selected.id != noteId;
@@ -53,17 +57,28 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
-app.delete("/api/notes/:id", (req, res) => {
-  let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
-  let noteId = req.params.id.toString();
+// app.delete("/api/notes/:id", (req, res) => {
+//   let noteList = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+//   let noteId = req.params.id.toString();
 
-  noteList = noteList.filter((selected) => {
-    return selected.id != noteId;
-  });
+//   noteList = noteList.filter((selected) => {
+//     return selected.id != noteId;
+//   });
 
-  fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
-  res.json(noteList);
-});
+//   fs.writeFileSync("./db/db.json", JSON.stringify(noteList));
+//   res.json(noteList);
+// });
+
+
+app.delete("/api/notes/:id", (req, res, next)=>{
+  const noteId = req.params.id.toString();
+  getIndexById("req params", noteId);
+  const itemIndex = myArray.findIndex(({ id }) => id === req.params.id);
+  if (itemIndex >= 0) {
+    myArray.splice(itemIndex, 1);
+  }
+
+})
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} `)
